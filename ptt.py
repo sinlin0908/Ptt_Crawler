@@ -279,6 +279,7 @@ class PTTGossipingCrawler(PTTBasicCrawler):
         for article in current_page_all_articles:
 
             push_count = self.get_push_count(article)
+            article_date = self.get_article_date(article)
 
             # 如果 推文少於設定值 -> 略過
             if push_count < self.min_push_count:
@@ -289,7 +290,7 @@ class PTTGossipingCrawler(PTTBasicCrawler):
                 continue
 
             # 如果超過日期 -> 跳出
-            article_date = self.get_article_date(article)
+
             if article_date != self.today_date:
                 return current_page_result_articles, pre_page_link, article_date
 
