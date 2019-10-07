@@ -233,6 +233,10 @@ class PTTBasicCrawler:
 class PTTGossipingCrawler(PTTBasicCrawler):
     '''
     八卦板爬蟲
+
+    屬性
+    ----
+        - max_page_size: 最大篇數
     '''
 
     def __init__(self, today_date: str, min_push_count: int = 0):
@@ -240,6 +244,7 @@ class PTTGossipingCrawler(PTTBasicCrawler):
         board_name = "八卦"
 
         super().__init__(board_name, today_date, min_push_count)
+        self.max_page_size = 5
 
     def _get_current_page_articles(self, url: str) -> tuple:
         """
@@ -314,13 +319,13 @@ class PTTGossipingCrawler(PTTBasicCrawler):
         article_date = self.today_date
 
         # 處理第二頁開始，直到日期不一樣
-        while article_date == self.today_date:
+        while article_date == self.today_date and len(result) < self.max_page_size:
             result += articles
 
             articles, prepage_link, article_date = self._get_current_page_articles(
                 prepage_link)
 
-        return result
+        return result[:self.max_page_size]
 
 
 if __name__ == "__main__":
